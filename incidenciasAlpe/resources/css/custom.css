@@ -1,0 +1,21 @@
+/* Alpe Formación Brand Identity */
+:root {
+    --alpe-blue: #0a4d98;
+    --alpe-blue-dark: #073a73;
+    --alpe-orange: #f18a00;
+    --alpe-orange-light: #ffb142;
+    --alpe-gray-bg: #f4f7f9;
+}
+
+body {
+    background-color: var(--alpe-gray-bg);
+    color: #334155;
+}
+
+.alpe-gradient-blue {
+    background: linear-gradient(135deg, #0a4d98 0%, #073a73 100%);
+}
+
+.alpe-gradient-orange {
+    background: linear-gradient(135deg, #f18a00 0%, #ffb142 100%);
+}
