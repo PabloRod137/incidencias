@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Incidencia;
-use App\Models\User;
 use App\Models\Aula;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
@@ -18,10 +17,9 @@ class IncidenciaController extends Controller
 
     public function create()
     {
-        $usuarios = User::all();
         $aulas = Aula::all();
         $categorias = Categoria::all();
-        return view('back.incidencias.create', compact('usuarios', 'aulas', 'categorias'));
+        return view('back.incidencias.create', compact('aulas', 'categorias'));
     }
 
     public function store(Request $request)
@@ -31,10 +29,11 @@ class IncidenciaController extends Controller
             'descripcion' => 'required|string',
             'estado' => 'required|in:abierta,en_proceso,resuelta',
             'prioridad' => 'required|in:baja,media,alta,critica',
-            'user_id' => 'required|exists:users,id',
             'aula_id' => 'required|exists:aulas,id',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
+
+        $validated['user_id'] = $request->user()->id;
 
         Incidencia::create($validated);
 
@@ -49,10 +48,9 @@ class IncidenciaController extends Controller
 
     public function edit(Incidencia $incidencia)
     {
-        $usuarios = User::all();
         $aulas = Aula::all();
         $categorias = Categoria::all();
-        return view('back.incidencias.edit', compact('incidencia', 'usuarios', 'aulas', 'categorias'));
+        return view('back.incidencias.edit', compact('incidencia', 'aulas', 'categorias'));
     }
 
     public function update(Request $request, Incidencia $incidencia)
@@ -62,7 +60,6 @@ class IncidenciaController extends Controller
             'descripcion' => 'required|string',
             'estado' => 'required|in:abierta,en_proceso,resuelta',
             'prioridad' => 'required|in:baja,media,alta,critica',
-            'user_id' => 'required|exists:users,id',
             'aula_id' => 'required|exists:aulas,id',
             'categoria_id' => 'required|exists:categorias,id',
         ]);

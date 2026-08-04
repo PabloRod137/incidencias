@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Comentario;
 use App\Models\Incidencia;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
@@ -17,18 +16,18 @@ class ComentarioController extends Controller
 
     public function create()
     {
-        $usuarios = User::all();
         $incidencias = Incidencia::all();
-        return view('back.comentarios.create', compact('usuarios', 'incidencias'));
+        return view('back.comentarios.create', compact('incidencias'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'incidencia_id' => 'required|exists:incidencias,id',
-            'user_id' => 'required|exists:users,id',
             'mensaje' => 'required|string',
         ]);
+
+        $validated['user_id'] = $request->user()->id;
 
         Comentario::create($validated);
 
@@ -37,16 +36,18 @@ class ComentarioController extends Controller
 
     public function edit(Comentario $comentario)
     {
-        $usuarios = User::all();
+        $this->authorizeOwner($comentario);
+
         $incidencias = Incidencia::all();
-        return view('back.comentarios.edit', compact('comentario', 'usuarios', 'incidencias'));
+        return view('back.comentarios.edit', compact('comentario', 'incidencias'));
     }
 
     public function update(Request $request, Comentario $comentario)
     {
+        $this->authorizeOwner($comentario);
+
         $validated = $request->validate([
             'incidencia_id' => 'required|exists:incidencias,id',
-            'user_id' => 'required|exists:users,id',
             'mensaje' => 'required|string',
         ]);
 
@@ -57,7 +58,18 @@ class ComentarioController extends Controller
 
     public function destroy(Comentario $comentario)
     {
+        $this->authorizeOwner($comentario);
+
         $comentario->delete();
         return redirect()->route('comentarios.index')->with('success', 'Comentario eliminado correctamente.');
+    }
+
+    private function authorizeOwner(Comentario $comentario): void
+    {
+        $user = auth()->user();
+
+        if ($comentario->user_id !== $user->id && $user->role !== 'admin') {
+            abort(403, 'No tienes permiso para modificar este comentario.');
+        }
     }
 }

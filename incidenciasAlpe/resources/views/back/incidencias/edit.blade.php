@@ -32,13 +32,11 @@
             </x-back.select>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-back.select label="Usuario (Creador)" name="user_id">
-                @foreach($usuarios as $user)
-                    <option value="{{ $user->id }}" {{ $incidencia->user_id == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->role }})</option>
-                @endforeach
-            </x-back.select>
+        <p class="text-xs text-slate-400">
+            Reportado por <span class="font-semibold text-slate-600">{{ $incidencia->creator->name ?? 'N/A' }}</span>
+        </p>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <x-back.select label="Aula" name="aula_id">
                 @foreach($aulas as $aula)
                     <option value="{{ $aula->id }}" {{ $incidencia->aula_id == $aula->id ? 'selected' : '' }}>{{ $aula->nombre }} - {{ $aula->ubicacion }}</option>

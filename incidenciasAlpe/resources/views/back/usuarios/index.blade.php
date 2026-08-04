@@ -44,6 +44,7 @@
                 </td>
                 <td class="px-4 py-4 text-sm text-right">
                     <div class="flex justify-end gap-2">
+                        <x-back.action-button :href="route('usuarios.show', $usuario)" type="show" />
                         <x-back.action-button :href="route('usuarios.edit', $usuario)" type="edit" />
                         <x-back.action-button :action="route('usuarios.destroy', $usuario)" type="delete" method="DELETE" />
                     </div>

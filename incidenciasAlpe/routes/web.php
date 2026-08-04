@@ -26,13 +26,17 @@ Route::middleware('auth')->group(function () {
 // Rutas del Panel de Administración (Back) - Protegidas por Auth
 Route::prefix('back')->middleware(['auth'])->group(function () {
     Route::get('/', [BackController::class, 'index'])->name('back.index');
-    
-    // Recursos CRUD Completos
+
+    // Accesibles para cualquier usuario autenticado (profesor, mantenimiento, admin)
     Route::resource('incidencias', IncidenciaController::class);
-    Route::resource('usuarios', UserController::class);
-    Route::resource('aulas', AulaController::class);
-    Route::resource('categorias', CategoriaController::class);
-    Route::resource('comentarios', ComentarioController::class);
+    Route::resource('comentarios', ComentarioController::class)->except(['show']);
+
+    // Gestión de datos maestros: solo administradores
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('usuarios', UserController::class);
+        Route::resource('aulas', AulaController::class);
+        Route::resource('categorias', CategoriaController::class);
+    });
 });
 
 require __DIR__.'/auth.php';

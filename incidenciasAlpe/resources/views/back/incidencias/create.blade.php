@@ -31,13 +31,7 @@
             </x-back.select>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-back.select label="Usuario (Creador)" name="user_id">
-                @foreach($usuarios as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->role }})</option>
-                @endforeach
-            </x-back.select>
-
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <x-back.select label="Aula" name="aula_id">
                 @foreach($aulas as $aula)
                     <option value="{{ $aula->id }}">{{ $aula->nombre }} - {{ $aula->ubicacion }}</option>

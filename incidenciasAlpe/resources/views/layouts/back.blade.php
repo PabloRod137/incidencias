@@ -36,15 +36,16 @@
                     $navItems = [
                         ['route' => 'back.index', 'label' => 'Dashboard', 'icon' => '📊'],
                         ['route' => 'incidencias.index', 'label' => 'Incidencias', 'icon' => '🎫'],
-                        ['route' => 'usuarios.index', 'label' => 'Usuarios', 'icon' => '👥'],
-                        ['route' => 'aulas.index', 'label' => 'Aulas', 'icon' => '🏫'],
-                        ['route' => 'categorias.index', 'label' => 'Categorías', 'icon' => '📁'],
+                        ['route' => 'usuarios.index', 'label' => 'Usuarios', 'icon' => '👥', 'adminOnly' => true],
+                        ['route' => 'aulas.index', 'label' => 'Aulas', 'icon' => '🏫', 'adminOnly' => true],
+                        ['route' => 'categorias.index', 'label' => 'Categorías', 'icon' => '📁', 'adminOnly' => true],
                         ['route' => 'comentarios.index', 'label' => 'Comentarios', 'icon' => '💬'],
                     ];
                 @endphp
 
                 @foreach($navItems as $item)
-                    <a href="{{ route($item['route']) }}" 
+                    @continue(($item['adminOnly'] ?? false) && Auth::user()->role !== 'admin')
+                    <a href="{{ route($item['route']) }}"
                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors {{ str_contains($currentRoute, explode('.', $item['route'])[0]) ? 'bg-alpe-orange text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
                         <span>{{ $item['icon'] }}</span>
                         <span>{{ $item['label'] }}</span>

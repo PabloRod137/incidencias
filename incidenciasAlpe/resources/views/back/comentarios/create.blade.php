@@ -12,19 +12,11 @@
     <form action="{{ route('comentarios.store') }}" method="POST" class="max-w-2xl space-y-6">
         @csrf
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <x-back.select label="Incidencia" name="incidencia_id">
-                @foreach($incidencias as $incidencia)
-                    <option value="{{ $incidencia->id }}">{{ $incidencia->titulo }}</option>
-                @endforeach
-            </x-back.select>
-
-            <x-back.select label="Autor" name="user_id">
-                @foreach($usuarios as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                @endforeach
-            </x-back.select>
-        </div>
+        <x-back.select label="Incidencia" name="incidencia_id">
+            @foreach($incidencias as $incidencia)
+                <option value="{{ $incidencia->id }}">{{ $incidencia->titulo }}</option>
+            @endforeach
+        </x-back.select>
 
         <x-back.textarea label="Mensaje" name="mensaje" required placeholder="Escribe tu comentario aquí..." />
 

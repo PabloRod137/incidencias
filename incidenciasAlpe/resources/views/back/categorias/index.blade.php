@@ -31,6 +31,7 @@
                 </td>
                 <td class="px-4 py-4 text-sm text-right">
                     <div class="flex justify-end gap-2">
+                        <x-back.action-button :href="route('categorias.show', $categoria)" type="show" />
                         <x-back.action-button :href="route('categorias.edit', $categoria)" type="edit" />
                         <x-back.action-button :action="route('categorias.destroy', $categoria)" type="delete" method="DELETE" />
                     </div>

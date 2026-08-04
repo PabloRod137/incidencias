@@ -1,4 +1,4 @@
-# Proyecto IncidenciasAlpe: [Título Descriptivo del Proyecto]
+# Proyecto IncidenciasAlpe: Gestión de Incidencias para Academia Alpe
 
 ## Tabla de Contenidos
 
@@ -25,24 +25,21 @@
 
 ## 1. Descripción del Proyecto
 
-[**TODO: Describe aquí brevemente de qué trata la aplicación IncidenciasAlpe. ¿Cuál es su propósito principal? ¿Qué problema resuelve?**]
-
-Este proyecto es una aplicación web desarrollada con Laravel que gestiona XXXX.
+IncidenciasAlpe es una aplicación web de gestión interna para la Academia Alpe. Permite a profesores, personal de mantenimiento y administradores registrar, dar seguimiento y resolver incidencias (averías, desperfectos, incidencias técnicas, etc.) sobre las aulas de la academia.
 
 ## 2. Características Principales
 
-[**TODO: Enumera las funcionalidades más importantes de la aplicación IncidenciasAlpe. Ejemplos:**]
-
-*   Sistema de gestión de incidencias.
-*   Autenticación de usuarios.
-*   Registro y seguimiento de tickets.
-*   Asignación de incidencias a técnicos/empleados.
-*   Notificaciones.
-*   [Añade más características específicas de tu proyecto aquí]
+*   Autenticación de usuarios (registro, login, recuperación de contraseña) vía Laravel Breeze.
+*   Roles de usuario: `admin`, `profesor` y `mantenimiento`, con permisos diferenciados en el panel.
+*   Registro y seguimiento de incidencias, con estado (abierta/en proceso/resuelta) y prioridad (baja/media/alta/crítica).
+*   Comentarios sobre cada incidencia para hacer seguimiento de su resolución.
+*   Gestión de aulas y de categorías de incidencias (con un responsable asignado por categoría) — reservada a administradores.
+*   Gestión de usuarios y roles — reservada a administradores.
+*   Dashboard con indicadores generales y actividad reciente.
 
 ## 3. Tecnologías Utilizadas
 
-*   **Backend:** PHP (v8.x) & Laravel (v12.x)
+*   **Backend:** PHP (v8.3+) & Laravel (v13.x)
 *   **Frontend:**
     *   Tailwind CSS (v3.x)
     *   Alpine.js (v3.x)
@@ -212,3 +209,9 @@ Bash
 
 
 docker-compose exec app php artisan test
+
+**Importante:** `docker-compose.yml` define `DB_CONNECTION=mysql`, `DB_DATABASE=alpe`, etc. como variables de entorno del contenedor `app`, que pueden tener prioridad sobre el sqlite en memoria que define `phpunit.xml` para los tests segun como las resuelva tu entorno Docker. Los tests fallaran explicitamente con un `RuntimeException` si detectan que no estan usando sqlite (ver `tests/TestCase.php`), en vez de arriesgarse a truncar la base de datos real. Si eso ocurre, fuerza el override explicitamente:
+
+Bash
+
+docker-compose exec -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: app php artisan test

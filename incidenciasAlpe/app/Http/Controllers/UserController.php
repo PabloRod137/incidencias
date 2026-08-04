@@ -63,8 +63,16 @@ class UserController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
-    public function destroy(User $usuario)
+    public function destroy(Request $request, User $usuario)
     {
+        if ($usuario->id === $request->user()->id) {
+            return redirect()->route('usuarios.index')->with('error', 'No puedes eliminar tu propia cuenta.');
+        }
+
+        if ($usuario->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return redirect()->route('usuarios.index')->with('error', 'No puedes eliminar al último administrador del sistema.');
+        }
+
         $usuario->delete();
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }

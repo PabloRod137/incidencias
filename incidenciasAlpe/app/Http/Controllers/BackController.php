@@ -2,48 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Incidencia;
-use App\Models\User;
 use App\Models\Aula;
 use App\Models\Categoria;
 use App\Models\Comentario;
-use Illuminate\Http\Request;
+use App\Models\Incidencia;
+use App\Models\User;
 
 class BackController extends Controller
 {
     public function index()
     {
-        return view('back.index');
-    }
+        $stats = [
+            'incidencias' => Incidencia::count(),
+            'usuarios' => User::count(),
+            'aulas' => Aula::count(),
+            'categorias' => Categoria::count(),
+        ];
 
-    public function incidencias()
-    {
-        // Cargamos las relaciones para evitar el problema N+1
-        $incidencias = Incidencia::with(['creator', 'aula', 'categoria'])->latest()->get();
-        return view('back.incidencias', compact('incidencias'));
-    }
+        $incidenciasRecientes = Incidencia::latest()->take(5)->get();
+        $comentariosRecientes = Comentario::with('user')->latest()->take(5)->get();
 
-    public function usuarios()
-    {
-        $usuarios = User::all();
-        return view('back.usuarios', compact('usuarios'));
-    }
-
-    public function aulas()
-    {
-        $aulas = Aula::all();
-        return view('back.aulas', compact('aulas'));
-    }
-
-    public function categorias()
-    {
-        $categorias = Categoria::with('responsable')->get();
-        return view('back.categoriass', compact('categorias'));
-    }
-
-    public function comentarios()
-    {
-        $comentarios = Comentario::with(['user', 'incidencia'])->latest()->get();
-        return view('back.comentarios', compact('comentarios'));
+        return view('back.index', compact('stats', 'incidenciasRecientes', 'comentariosRecientes'));
     }
 }

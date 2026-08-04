@@ -13,19 +13,15 @@
         @csrf
         @method('PUT')
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <x-back.select label="Incidencia" name="incidencia_id">
-                @foreach($incidencias as $incidencia)
-                    <option value="{{ $incidencia->id }}" {{ $comentario->incidencia_id == $incidencia->id ? 'selected' : '' }}>{{ $incidencia->titulo }}</option>
-                @endforeach
-            </x-back.select>
+        <x-back.select label="Incidencia" name="incidencia_id">
+            @foreach($incidencias as $incidencia)
+                <option value="{{ $incidencia->id }}" {{ $comentario->incidencia_id == $incidencia->id ? 'selected' : '' }}>{{ $incidencia->titulo }}</option>
+            @endforeach
+        </x-back.select>
 
-            <x-back.select label="Autor" name="user_id">
-                @foreach($usuarios as $user)
-                    <option value="{{ $user->id }}" {{ $comentario->user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                @endforeach
-            </x-back.select>
-        </div>
+        <p class="text-xs text-slate-400">
+            Autor <span class="font-semibold text-slate-600">{{ $comentario->user->name ?? 'N/A' }}</span>
+        </p>
 
         <x-back.textarea label="Mensaje" name="mensaje" :value="$comentario->mensaje" required />
 
